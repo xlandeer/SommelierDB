@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+$bgColor: #171717;
+$bgSecondaryColor: #222;
+$primeColor: #fff;
+$secondaryColor: #2596be;
+
+body {
+	background-color: $bgColor;
+
+	main {
+		margin: 5rem 0;
+		font-family: "Poppins";
+		color: $primeColor;
+		.input-wrapper {
+
+			width: 50%;
+			margin-left: 10%;
+		}
+		.field-wrapper {
+			display: grid;
+			width: 50%;
+			margin-left: 10%;
+			
+			.field-cell {
+				border: 1px solid #fff;
+			}
+			.field-cell-ship {
+				border: 1px solid #fff;
+				background-color: red;
+			}
+		}
+	}
+}

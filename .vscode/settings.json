@@ -1,0 +1,5 @@
+{
+    "livePreview.defaultPreviewPath": "/build/index.html",
+    "codetogether.virtualCursorJoin": "ownVirtualCursor",
+    "codetogether.virtualCursorRemember": true
+}

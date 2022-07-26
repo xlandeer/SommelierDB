@@ -1,0 +1,25 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap");
+body {
+  background-color: #171717;
+}
+body main {
+  margin: 5rem 0;
+  font-family: "Poppins";
+  color: #fff;
+}
+body main .input-wrapper {
+  width: 50%;
+  margin-left: 10%;
+}
+body main .field-wrapper {
+  display: grid;
+  width: 50%;
+  margin-left: 10%;
+}
+body main .field-wrapper .field-cell {
+  border: 1px solid #fff;
+}
+body main .field-wrapper .field-cell-ship {
+  border: 1px solid #fff;
+  background-color: red;
+}/*# sourceMappingURL=main.css.map */
