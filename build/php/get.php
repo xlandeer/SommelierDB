@@ -25,17 +25,76 @@
     $sname = "127.0.0.1";
 	$uname = "root";
 	$pswd = "";
-	$dbname = "Cocktail";
+	$dbname = "Whiskey";
 
     $conn = connToDB($sname, $uname, $pswd, $dbname);
 
     //GET REQUEST
 
-    if($_SERVER['REQUEST_METHOD'] === 'GET' /*isset($_GET['attribute'] e.g'*/ )	{
-		//Your Get request code here
+    if($_SERVER['REQUEST_METHOD'] === 'GET'  && isset($_GET['searchFilter']) && isset($_GET['attribute']))	{
+        $results = [];
+		$attr_prefix;
+		switch ($_GET['attribute']) {
+			case 'whiskey_name':
+			case 'distillery':
+			case 'origin_country':
+			case 'years_aged':
+			case 'type':
+			case 'additional_traits':
+				$attr_prefix = "wd.";
+				break;
+			case 'nose':
+				$attr_prefix = "wnn.";
+				break;
+			case 'taste':
+			case 'author':
+				$attr_prefix = "wnt.";
+				break;
+			
+		}
+		$attr = $attr_prefix . $_GET['attribute'];
+
+        $sql = 'SELECT wd.* FROM whiskey_data wd  ';
+		$sql .= 'LEFT JOIN whiskey_note_taste wnt ON wd.id = wnt.whiskey_id ';
+		$sql .= 'LEFT JOIN whiskey_note_nose wnn ON wd.id = wnn.whiskey_id ';
+		$sql .= 'WHERE '.$attr.' LIKE "%'.$_GET["searchFilter"].'%" GROUP BY wd.name;';
+
+		$searchRes = mysqli_query($conn, $sql);
+		
+		if ($searchRes->num_rows > 0) {
+			
+			while($row = $searchRes->fetch_assoc()) {
+				$id = (int)$row['id'];
+				$tasteNoteRes = [];
+                $sql = "SELECT note FROM whiskey_note_taste WHERE whiskey_id = $id";
+                $tasteSearchRes = mysqli_query($conn, $sql);
+				
+                if ($tasteSearchRes->num_rows > 0) {
+                    while($rowTaste = $tasteSearchRes->fetch_assoc()) {
+                        $rowResTaste = $rowTaste["note"];
+                        array_push($tasteNoteRes, $rowResTaste);
+                    }
+				}
+
+				$noseNoteRes = [];
+				$sql = "SELECT note FROM whiskey_note_nose WHERE whiskey_id = $id";
+                $noseSearchRes = mysqli_query($conn, $sql);
+				
+                if ($noseSearchRes->num_rows > 0) {
+                    while($rowNose = $noseSearchRes->fetch_assoc()) {
+                        $rowResNose = $rowNose["note"];
+                        array_push($noseNoteRes, $rowResNose);
+                    }
+				}
+				$rowRes = ['imageUrl' => $row["image_url"], 'name' => $row["name"], 'distillery' => $row["distillery"],'originCountry' => $row["origin_country"],'yearsAged' => $row["years_aged"],'type' => $row["type"],'additionalTraits' => $row["additional_traits"],'author' => $row["author"],'tasteNotes' => $tasteNoteRes,'noseNotes' => $noseNoteRes, 'id' => $id];
+				array_push($results, $rowRes);
+			}
+			echo(json_encode($results));
+		}
+		
         
 	}else {
-        echo 'Please use the affiliated Script for the HTTP Method!';
+        
 		http_response_code(405); 
 		die();
     }

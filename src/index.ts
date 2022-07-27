@@ -1,27 +1,26 @@
-import { type } from "os";
-
 namespace Utils {
   export function appendElements(parent: Element, ...nodes: HTMLElement[]) {
     for (const node of nodes) {
       parent.appendChild(node);
     }
   }
-  export function createElementWithAttributes<elementType extends HTMLElement>(
+  export function createElementWithAttributes(
     name: string,
     ...attributes: [string, string][]
-  ): elementType {
-    let element = document.createElement(name) as elementType;
+  ) {
+    let element = document.createElement(name);
     for (const attribute of attributes) {
       element.setAttribute(attribute[0], attribute[1]);
     }
     return element;
   }
 
-  export async function uploadFile(file: File) {
+  export async function uploadFile() {
     let formData = new FormData();
+    let files = imageUpload.files;
 
-    if (file) {
-      formData.append("file", file);
+    if (files) {
+      formData.append("file", files[0]);
 
       const response = await fetch("php/upload.php", {
         method: "POST",
@@ -32,180 +31,330 @@ namespace Utils {
   }
 }
 
-class Position {
-  constructor(public posX: number, public posY: number) {}
+interface WhiskeyInfo {
+  [key: string]: string | number
+
 }
 
-class Ship {
-  private isSet: boolean = false;
-  private core: Position = new Position(0, 0);
-  private coords: Position[] = new Array();
-  private coreOffsets: [number, number][];
-  constructor(...coreOffsets: [number, number][]) {
-    this.coreOffsets = coreOffsets;
-  }
+class Whiskey {
+  private whiskeyInfos: WhiskeyInfo;
+  private noseNotes: string[];
+  private tasteNotes: string[];
 
-  public projectShip(corePosition: Position, field: Cell[][]) {
-    this.clearCoords(field);
-    if (!this.isSet) {
-      this.core = corePosition;
-      field[corePosition.posX][corePosition.posY].asShip();
-      this.coords.push(corePosition);
-      for (const offset of this.coreOffsets) {
-        let cell: Cell;
-        if (
-          corePosition.posX + offset[0] <= fieldWidth - 1 &&
-          corePosition.posY + offset[1] <= fieldHeight - 1 &&
-          corePosition.posX + offset[0] >= 0 &&
-          corePosition.posY + offset[1] >= 0
-        ) {
-          field[corePosition.posX + offset[0]][corePosition.posY + offset[1]].asShip();
-          this.coords.push(
-            new Position(
-              corePosition.posX + offset[0],
-              corePosition.posY + offset[1]
-            )
-          );
-        }
-      }
-    }
-  }
-
-  private clearCoords(field: Cell[][]) {
-    if (this.coords.length) {
-      for (const coord of this.coords) {
-        field[coord.posX][coord.posY].asNormal();
-      }
-      this.coords = new Array();
-    }
-  }
-
-  public setShip() {
-    this.isSet = true;
-    for (const coord of this.coords) {
-      battleField.field[coord.posX][coord.posY].setAsShip();
-    }
-  }
-
-  public getCoords() {
-    return this.coords;
-  }
-}
-
-class BattleField {
-  fieldWrapper: HTMLDivElement = Utils.createElementWithAttributes("div", [
-    "class",
-    "field-wrapper",
-  ]);
-  field: Cell[][] = new Array();
-  private ships: Ship[] = new Array();
-  shipPositions: Position[] = new Array();
-  constructor(private width: number, private height: number) {
-    this.fieldWrapper.style.gridTemplateColumns = `repeat(${this.width}, 30px)`;
-    this.fieldWrapper.style.gridTemplateRows = `repeat(${this.height}, 30px)`;
-
-    parentDOMElement?.appendChild(this.fieldWrapper);
-
-    for (let x: number = 0; x < this.height; x++) {
-      this.field[x] = new Array(this.width);
-      for (let y: number = 0; y < this.width; y++) {
-        this.field[x][y] = new Cell(
-          new Position(x, y),
-          this.fieldWrapper,
-          this
-        );
-      }
-    }
-  }
-
-  public checkShip(ship: Ship) {
-    for (const coord of ship.getCoords()) {
-      if (battleField.field[coord.posX][coord.posY].isShip()) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  public addShip(ship: Ship) {
-    this.ships.push(ship);
-  }
-}
-
-class Cell {
-  private div: HTMLDivElement;
-  private ship: boolean = false;
   constructor(
-    private position: Position,
-    private mazeWrapper: HTMLDivElement,
-    private parent: BattleField
+    private imgPath: string,
+    private name: string,
+    private distillery: string,
+    private originCountry: string,
+    private yearsAged: number,
+    private type: string,
+    private additionalTraits: string,
+    private author: string,
+    noseNotes: string[],
+    tasteNotes: string[],
+    private id?: number
   ) {
-    this.div = Utils.createElementWithAttributes("div", [
+    this.whiskeyInfos = {
+      "Whiskey Name": name,
+      "Whiskey Distillery": distillery,
+      "Origin Country": originCountry,
+      "Years Aged": yearsAged,
+      "Whiskey Type": type,
+      "Additional Traits": additionalTraits
+    }
+    this.noseNotes = [...new Set(noseNotes)];
+    this.tasteNotes = [...new Set(tasteNotes)];
+  }
+
+  addRepresentation() {
+    //Create every Element with Attributes
+    let whiskeyWrapper = Utils.createElementWithAttributes("div", [
       "class",
-      "field-cell",
+      "whiskey-wrapper",
     ]);
-    this.mazeWrapper.appendChild(this.div);
-    this.div.addEventListener("click", () => {
-      Cell.constructShipOnCell(this);
+    let image = Utils.createElementWithAttributes("img", ["src", this.imgPath]);
+    let nameLabel = Utils.createElementWithAttributes("h2");
+    nameLabel.textContent = this.name;
+    let deleteBtn = Utils.createElementWithAttributes(
+      "input",
+      ["type", "image"],
+      ["src", "images/x_btn.svg"]
+    );
+
+    let infoWrapper = Utils.createElementWithAttributes("ul", [
+      "class",
+      "info-wrapper",
+    ]);
+    let infoHeader = document.createElement('h3');
+    infoHeader.textContent = "Info: ";
+    infoWrapper.append(infoHeader);
+    for (const info in this.whiskeyInfos) {
+      let noteElement = document.createElement("li");
+      noteElement.textContent = info + ": " + this.whiskeyInfos[info];
+      infoWrapper.appendChild(noteElement);
+    }
+
+    
+    //Add DeleteBtn Event Listener
+    const copy = this;
+    deleteBtn.addEventListener("click", () => {
+      Whiskey.deleteFromStorage(copy);
     });
-    this.div.addEventListener("mouseover", (event: any) => {
-      Cell.projectShipOnCell(this);
+
+
+    //generate NoseNoteList
+    let noseWrapper = Utils.createElementWithAttributes("ul", [
+      "class",
+      "info-wrapper",
+    ]);
+    infoHeader = document.createElement('h3');
+    infoHeader.textContent = "Nose: ";
+    noseWrapper.append(infoHeader);
+    for (const noseNote of this.noseNotes) {
+      let noteElement = document.createElement("li");
+      noteElement.textContent = noseNote;
+      noseWrapper.appendChild(noteElement);
+    }
+
+    let tasteWrapper = Utils.createElementWithAttributes("ul", [
+      "class",
+      "info-wrapper",
+    ]);
+    
+    infoHeader = document.createElement('h3');
+    infoHeader.textContent = "Taste: ";
+    tasteWrapper.append(infoHeader);
+    for (const tasteNote of this.tasteNotes) {
+      let noteElement = document.createElement("li");
+      noteElement.textContent = tasteNote;
+      tasteWrapper.appendChild(noteElement);
+    }
+
+    //Append Elements to their corresponding Parent
+    Utils.appendElements(
+      whiskeyWrapper,
+      image,
+      nameLabel,
+      document.createElement("hr"),
+      infoWrapper,
+      document.createElement("hr"),
+      noseWrapper,
+      tasteWrapper,
+      deleteBtn
+    );
+    Utils.appendElements(parentDOMElement, whiskeyWrapper);
+  }
+
+  static loadFromStorage(attr: string = "name", searchFilter: string = "") {
+    $.ajax({
+      url: "php/get.php",
+      type: "GET",
+      data: { attribute: attr, searchFilter: searchFilter },
+      success: function (returnData) {
+        parentDOMElement.innerHTML = "";
+
+        if (returnData) {
+          for (const whiskey of JSON.parse(returnData)) {
+            const newWhiskey: Whiskey = new Whiskey(
+              whiskey.imageUrl,
+              whiskey.name,
+              whiskey.distillery,
+              whiskey.originCountry,
+              whiskey.yearsAged,
+              whiskey.type,
+              whiskey.additionalTraits,
+              whiskey.author,
+              whiskey.noseNotes,
+              whiskey.tasteNotes,
+              whiskey.id
+            );
+            newWhiskey.addRepresentation();
+          }
+        }
+      },
+      error: function (xhr, status, error) {
+        let errorMessage = xhr.responseText;
+        console.log("Error - " + errorMessage);
+      },
     });
   }
 
-  static projectShipOnCell(cell: Cell) {
-    if (!cell.ship && activeShip != undefined) {
-      activeShip.projectShip(cell.position, cell.parent.field);
-    }
+  static deleteFromStorage(whiskey: Whiskey) {
+    $.ajax({
+      url: "php/post.php", // url where the data should be sent
+      type: "POST", // http method
+
+      // all data || notation in JSON
+      data: { intention: "delete", id: whiskey.id, imgPath: "../"+whiskey.imgPath },
+      success: function (data, status, xhr) {
+        console.log(xhr.responseText);
+        
+        Whiskey.loadFromStorage();
+      },
+    });
   }
 
-  static constructShipOnCell(cell: Cell) {
-    if (activeShip != undefined) {
-      if (cell.parent.checkShip(activeShip)) {
-        activeShip.setShip();
-        cell.parent.addShip(activeShip);
-        activeShip = availableShips.pop();
-      }
-    }
-  }
+  static saveToStorage(whiskey: Whiskey) {
+    // $.ajax({
+    //     method: "POST",
+    //     url: "index.php",
+    //     data: {name: Whiskey.name, imageUrl: Whiskey.imgPath}
+    // }).catch(function(response) {
+    //     console.log(response);
+    // });
+    $.ajax({
+      url: "php/post.php", // url where the data should be sent
+      type: "POST", // http method
 
-  public getPosition() {
-    return this.position;
-  }
-
-  public asShip() {
-    this.div.className = "field-cell-ship";
-  }
-
-  public asNormal() {
-    if (!this.ship) {
-      this.div.className = "field-cell";
-    }
-  }
-
-  public setAsShip() {
-    this.ship = true;
-  }
-
-  public isShip() {
-    return this.ship;
+      // all data || notation in JSON
+      data: {
+        intention: "save",
+        imageUrl: whiskey.imgPath,
+        name: whiskey.name,
+        distillery: whiskey.distillery,
+        origin_country: whiskey.originCountry,
+        years_aged: whiskey.yearsAged,
+        type: whiskey.type,
+        additional_traits: whiskey.additionalTraits,
+        nose_notes: whiskey.noseNotes,
+        taste_notes: whiskey.tasteNotes,
+        author: whiskey.author,
+      },
+      success: function (data, status, xhr) {
+        Whiskey.loadFromStorage();
+      },
+      error: function (xhr, status, error) {
+        let errorMessage = xhr.responseText;
+        console.log("Error - " + errorMessage);
+      },
+    });
   }
 }
+//Parent Element
+const parentDOMElement = document.querySelector(
+  ".whiskey-section"
+) as HTMLDivElement;
 
-const parentDOMElement = document.querySelector("main");
-const availableShips: Ship[] = [
-  new Ship([1, 0], [0, 1]),
-  new Ship([1, 0], [2, 0]),
-  new Ship([0, 2], [0, 1]),
-  new Ship([1, 1], [0, 1], [2,1]),
-];
-let activeShip: Ship | undefined = availableShips.pop();
+//Inputs
+const inputWhiskeyName = document.querySelector(
+  ".input-wrapper .whiskey-data-wrapper .name"
+) as HTMLInputElement;
+const inputWhiskeyDistillery = document.querySelector(
+  ".input-wrapper .whiskey-data-wrapper .distillery"
+) as HTMLInputElement;
+const inputOriginCountry = document.querySelector(
+  ".input-wrapper .whiskey-data-wrapper .origin_country"
+) as HTMLInputElement;
+const inputYearsAged = document.querySelector(
+  ".input-wrapper .whiskey-data-wrapper .years_aged"
+) as HTMLInputElement;
+const inputType = document.querySelector(
+  ".input-wrapper .whiskey-data-wrapper .type"
+) as HTMLInputElement;
+const inputAdditionalTraits = document.querySelector(
+  ".input-wrapper .whiskey-data-wrapper .additional_traits"
+) as HTMLInputElement;
+const inputNoseNote = document.querySelector(
+  ".input-wrapper .whiskey-note-wrapper .add-nose-note"
+) as HTMLInputElement;
+const inputTasteNote = document.querySelector(
+  ".input-wrapper .whiskey-note-wrapper .add-taste-note"
+) as HTMLInputElement;
+const inputAuthor = document.querySelector(
+  ".input-wrapper .whiskey-note-wrapper .author"
+) as HTMLInputElement;
+
+//Divs
+const noseNoteWrapper = document.querySelector(
+  ".input-wrapper .whiskey-note-wrapper .nose-note-wrapper"
+) as HTMLDivElement;
+const tasteNoteWrapper = document.querySelector(
+  ".input-wrapper .whiskey-note-wrapper .taste-note-wrapper"
+) as HTMLDivElement;
+
+//Buttons
+const addNoseNoteBtn = document.querySelector(
+  ".input-wrapper .whiskey-note-wrapper .add-nose-note-btn"
+) as HTMLButtonElement;
+const addTasteNoteBtn = document.querySelector(
+  ".input-wrapper .whiskey-note-wrapper .add-taste-note-btn"
+) as HTMLButtonElement;
+
+let currentNoseNotes: string[] = new Array();
+let currentTasteNotes: string[] = new Array();
+
+//Button action listeners
+addNoseNoteBtn.addEventListener("click", () => {
+  let note = inputNoseNote.value;
+  currentNoseNotes.push(note);
+  noseNoteWrapper.innerHTML += `<div>${note}</div>`;
+  inputNoseNote.value = "";
+});
+addTasteNoteBtn.addEventListener("click", () => {
+  let note = inputTasteNote.value;
+  currentTasteNotes.push(note);
+  tasteNoteWrapper.innerHTML += `<div>${note}</div>`;
+  inputTasteNote.value = "";
+});
 
 document
-  .querySelector(".input-wrapper .start-btn")
-  ?.addEventListener("click", () => {});
+  .querySelector(".input-wrapper .add-whiskey-btn")
+  ?.addEventListener("click", async () => {
+    Utils.uploadFile().then(() => {
+      let imagePath = "ERROR";
+      if (imageUpload.files) {
+        imagePath = "images/" + imageUpload.files[0].name;
+      }
+      if (inputWhiskeyName.value && imagePath) {
+        const newWhiskey: Whiskey = new Whiskey(
+          imagePath,
+          inputWhiskeyName.value,
+          inputWhiskeyDistillery.value,
+          inputOriginCountry.value,
+          parseInt(inputYearsAged.value),
+          inputType.value,
+          inputAdditionalTraits.value,
+          inputAuthor.value,
+          currentNoseNotes,
+          currentTasteNotes
+        );
 
-const fieldWidth = 15;
-const fieldHeight = 15;
+        Whiskey.saveToStorage(newWhiskey);
+        inputWhiskeyName.value = "";
+        inputWhiskeyDistillery.value = "";
+        inputOriginCountry.value = "";
+        inputYearsAged.value = "";
+        inputType.value = "";
+        inputAdditionalTraits.value = "";
+        inputAuthor.value = "";
+        tasteNoteWrapper.innerHTML = "";
+        noseNoteWrapper.innerHTML = "";
+        imageUpload.value = "";
+        currentNoseNotes = new Array();
+        currentTasteNotes = new Array();
+      }
+    });
+  });
 
-let battleField: BattleField = new BattleField(15, 15);
+const whiskeyFilter = document.querySelector(
+  ".search-wrapper .whiskey-filter"
+) as HTMLInputElement;
+
+const attributeToSearch = document.querySelector(
+  ".search-wrapper .search-for-select"
+) as HTMLSelectElement;
+
+const imageUpload = document.querySelector(
+  ".input-wrapper #image-upload"
+) as HTMLInputElement;
+
+whiskeyFilter.addEventListener("input", (event: any) => {
+  Whiskey.loadFromStorage(attributeToSearch.value, whiskeyFilter.value);
+});
+attributeToSearch.addEventListener("change", () => {
+  Whiskey.loadFromStorage(attributeToSearch.value, whiskeyFilter.value);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  Whiskey.loadFromStorage();
+});
