@@ -116,7 +116,7 @@ ALTER TABLE `whiskey_note_taste`
 -- AUTO_INCREMENT für Tabelle `whiskey_data`
 --
 ALTER TABLE `whiskey_data`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- Constraints der exportierten Tabellen
@@ -126,7 +126,7 @@ ALTER TABLE `whiskey_data`
 -- Constraints der Tabelle `whiskey_note_nose`
 --
 ALTER TABLE `whiskey_note_nose`
-  ADD CONSTRAINT `FK_whiskey_id_nose` FOREIGN KEY (`whiskey_id`) REFERENCES `whiskey_data` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_whiskey_id_nose` FOREIGN KEY (`whiskey_id`) REFERENCES `whiskey_data` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints der Tabelle `whiskey_note_taste`
