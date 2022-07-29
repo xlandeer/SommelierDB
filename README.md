@@ -21,5 +21,5 @@ $ npm install --save-dev typescript tslint @types/node @types/jquery
 ```sh
 $ /node_modules/.bin/tsc -p tsconfig.json
 ```
-=> load onto a Webserver and locate to 'Server-IP':80/WhiskeyDatabase/build
+&rarr; load onto a Webserver and locate to 'Server-IP':80/WhiskeyDatabase/build
 
