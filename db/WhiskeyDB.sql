@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jul 27, 2022 at 06:55 AM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Host: 127.0.0.1
+-- Erstellungszeit: 29. Jul 2022 um 11:40
+-- Server-Version: 10.4.24-MariaDB
+-- PHP-Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `Whiskey`
+-- Datenbank: `whiskey`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `whiskey_data`
+-- Tabellenstruktur für Tabelle `whiskey_data`
 --
 
 CREATE TABLE `whiskey_data` (
@@ -40,7 +40,7 @@ CREATE TABLE `whiskey_data` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `whiskey_data`
+-- Daten für Tabelle `whiskey_data`
 --
 
 INSERT INTO `whiskey_data` (`id`, `image_url`, `name`, `distillery`, `origin_country`, `years_aged`, `type`, `additional_traits`, `author`) VALUES
@@ -49,7 +49,7 @@ INSERT INTO `whiskey_data` (`id`, `image_url`, `name`, `distillery`, `origin_cou
 -- --------------------------------------------------------
 
 --
--- Table structure for table `whiskey_note_nose`
+-- Tabellenstruktur für Tabelle `whiskey_note_nose`
 --
 
 CREATE TABLE `whiskey_note_nose` (
@@ -58,7 +58,7 @@ CREATE TABLE `whiskey_note_nose` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `whiskey_note_nose`
+-- Daten für Tabelle `whiskey_note_nose`
 --
 
 INSERT INTO `whiskey_note_nose` (`whiskey_id`, `note`) VALUES
@@ -69,7 +69,7 @@ INSERT INTO `whiskey_note_nose` (`whiskey_id`, `note`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `whiskey_note_taste`
+-- Tabellenstruktur für Tabelle `whiskey_note_taste`
 --
 
 CREATE TABLE `whiskey_note_taste` (
@@ -78,7 +78,7 @@ CREATE TABLE `whiskey_note_taste` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `whiskey_note_taste`
+-- Daten für Tabelle `whiskey_note_taste`
 --
 
 INSERT INTO `whiskey_note_taste` (`whiskey_id`, `note`) VALUES
@@ -87,49 +87,49 @@ INSERT INTO `whiskey_note_taste` (`whiskey_id`, `note`) VALUES
 (27, 'Orange');
 
 --
--- Indexes for dumped tables
+-- Indizes der exportierten Tabellen
 --
 
 --
--- Indexes for table `whiskey_data`
+-- Indizes für die Tabelle `whiskey_data`
 --
 ALTER TABLE `whiskey_data`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `whiskey_note_nose`
+-- Indizes für die Tabelle `whiskey_note_nose`
 --
 ALTER TABLE `whiskey_note_nose`
   ADD PRIMARY KEY (`whiskey_id`,`note`);
 
 --
--- Indexes for table `whiskey_note_taste`
+-- Indizes für die Tabelle `whiskey_note_taste`
 --
 ALTER TABLE `whiskey_note_taste`
   ADD PRIMARY KEY (`whiskey_id`,`note`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT für exportierte Tabellen
 --
 
 --
--- AUTO_INCREMENT for table `whiskey_data`
+-- AUTO_INCREMENT für Tabelle `whiskey_data`
 --
 ALTER TABLE `whiskey_data`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
--- Constraints for dumped tables
+-- Constraints der exportierten Tabellen
 --
 
 --
--- Constraints for table `whiskey_note_nose`
+-- Constraints der Tabelle `whiskey_note_nose`
 --
 ALTER TABLE `whiskey_note_nose`
   ADD CONSTRAINT `FK_whiskey_id_nose` FOREIGN KEY (`whiskey_id`) REFERENCES `whiskey_data` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Constraints for table `whiskey_note_taste`
+-- Constraints der Tabelle `whiskey_note_taste`
 --
 ALTER TABLE `whiskey_note_taste`
   ADD CONSTRAINT `FK_whiskey_id_taste` FOREIGN KEY (`whiskey_id`) REFERENCES `whiskey_data` (`id`) ON DELETE CASCADE;
