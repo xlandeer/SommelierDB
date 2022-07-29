@@ -1,16 +1,19 @@
-
-
 type Amount = { amt: number; measure: string };
 namespace Utils {
-  export function appendElements(
-    parent: Element,
-    ...nodes: HTMLElement[]
-  ) {
+  export const seperatorLine = (classname?: string) => {
+    return classname
+      ? createElementWithAttributes("hr", ["class", classname])
+      : document.createElement("hr");
+  };
+  export function appendElements(parent: Element, ...nodes: HTMLElement[]) {
     for (const node of nodes) {
       parent.appendChild(node);
     }
   }
-  export function createElementWithAttributes(name: string, ...attributes: [string, string][]) {
+  export function createElementWithAttributes(
+    name: string,
+    ...attributes: [string, string][]
+  ) {
     let element = document.createElement(name);
     for (const attribute of attributes) {
       element.setAttribute(attribute[0], attribute[1]);
@@ -21,17 +24,15 @@ namespace Utils {
   export async function uploadFile() {
     let formData = new FormData();
     let files = imageUpload.files;
-    
-    
-    if(files){
-      formData.append("file",files[0]);
 
-      const response = await fetch('php/upload.php', {
+    if (files) {
+      formData.append("file", files[0]);
+
+      const response = await fetch("php/upload.php", {
         method: "POST",
-        body: formData
+        body: formData,
       });
       //console.log(await response);
-
     }
   }
 }
@@ -72,11 +73,23 @@ class Cocktail {
 
   addRepresentation() {
     //Create every Element with Attributes
-    let cocktailWrapper = Utils.createElementWithAttributes("div",["class","cocktail-wrapper"]);
-    let image = Utils.createElementWithAttributes("img",["src",this.imgPath]);
-    let nameLabel = Utils.createElementWithAttributes("h2");nameLabel.textContent = this.name;
-    let description = Utils.createElementWithAttributes("div", ["classname", "cocktail-description"]); description.textContent = this.description;
-    let deleteBtn = Utils.createElementWithAttributes("input",["type", "image"],["src", "images/x_btn.svg"]);
+    let cocktailWrapper = Utils.createElementWithAttributes("div", [
+      "class",
+      "cocktail-wrapper",
+    ]);
+    let image = Utils.createElementWithAttributes("img", ["src", this.imgPath]);
+    let nameLabel = Utils.createElementWithAttributes("h2");
+    nameLabel.textContent = this.name;
+    let description = Utils.createElementWithAttributes("div", [
+      "classname",
+      "cocktail-description",
+    ]);
+    description.textContent = this.description;
+    let deleteBtn = Utils.createElementWithAttributes(
+      "input",
+      ["type", "image"],
+      ["src", "images/x_btn.svg"]
+    );
 
     //Add DeleteBtn Event Listener
     const copy = this;
@@ -89,27 +102,40 @@ class Cocktail {
     let iterator = this.ingredients.generateIterator();
     for (const ingredrient of iterator) {
       let ingredient = document.createElement("li");
-      ingredient.textContent = ingredrient.key + ": " + ingredrient.value.amt + " " + ingredrient.value.measure;
+      ingredient.textContent =
+        ingredrient.key +
+        ": " +
+        ingredrient.value.amt +
+        " " +
+        ingredrient.value.measure;
       ingredients.appendChild(ingredient);
     }
-    
+
     //Append Elements to their corresponding Parent
-    Utils.appendElements(cocktailWrapper,image,nameLabel,ingredients,description,deleteBtn);
-    Utils.appendElements(this.parent,cocktailWrapper);
+    Utils.appendElements(
+      cocktailWrapper,
+      image,
+      nameLabel,
+      Utils.seperatorLine(),
+      ingredients,
+      description,
+      deleteBtn
+    );
+    Utils.appendElements(this.parent, cocktailWrapper);
   }
 
-  static loadFromStorage(attr: string = "cocktail_name",searchFilter: string = "") {
+  static loadFromStorage(
+    attr: string = "cocktail_name",
+    searchFilter: string = ""
+  ) {
     $.ajax({
       url: "php/get.php",
       type: "GET",
       data: { attribute: attr, searchFilter: searchFilter },
       success: function (returnData) {
-
-        
         parentDOMElement.innerHTML = "";
         if (returnData) {
           for (const element of JSON.parse(returnData)) {
-            
             let newIngredients = new IngredientMap();
             for (const ingr of element.ingredients) {
               newIngredients.set(ingr.ingr_name, {
@@ -142,7 +168,11 @@ class Cocktail {
       type: "POST", // http method
 
       // all data || notation in JSON
-      data: { intention: "delete", id: cocktail.id, imgPath: "../"+cocktail.imgPath},
+      data: {
+        intention: "delete",
+        id: cocktail.id,
+        imgPath: "../" + cocktail.imgPath,
+      },
       success: function (data, status, xhr) {
         Cocktail.loadFromStorage();
       },
@@ -167,7 +197,7 @@ class Cocktail {
         name: cocktail.name,
         imageUrl: cocktail.imgPath,
         ingredients: cocktail.ingredients,
-        description: cocktail.description
+        description: cocktail.description,
       },
       success: function (data, status, xhr) {
         Cocktail.loadFromStorage();
@@ -219,13 +249,14 @@ const description = document.querySelector(
 ) as HTMLTextAreaElement;
 
 cocktailFilter.addEventListener("input", (event: any) => {
-  Cocktail.loadFromStorage(attributeToSearch.value,cocktailFilter.value);
+  Cocktail.loadFromStorage(attributeToSearch.value, cocktailFilter.value);
 });
-attributeToSearch.addEventListener('change', () => {
-  Cocktail.loadFromStorage(attributeToSearch.value,cocktailFilter.value);
-})
+attributeToSearch.addEventListener("change", () => {
+  Cocktail.loadFromStorage(attributeToSearch.value, cocktailFilter.value);
+});
 
-document.querySelector(".input-wrapper .add-ingr-btn")
+document
+  .querySelector(".input-wrapper .add-ingr-btn")
   ?.addEventListener("click", () => {
     if (
       inputIngrName.value &&
@@ -246,11 +277,12 @@ document.querySelector(".input-wrapper .add-ingr-btn")
     }
   });
 
-document.querySelector(".input-wrapper .add-cocktail-btn")
+document
+  .querySelector(".input-wrapper .add-cocktail-btn")
   ?.addEventListener("click", async () => {
     Utils.uploadFile().then(() => {
       let imagePath = "ERROR";
-      if(imageUpload.files) {
+      if (imageUpload.files) {
         imagePath = "images/" + imageUpload.files[0].name;
       }
       if (cocktailName.value && imagePath && description.value) {
@@ -269,12 +301,9 @@ document.querySelector(".input-wrapper .add-cocktail-btn")
         imageUpload.value = "";
         description.value = "";
       }
-      
     });
-    
   });
 
 document.addEventListener("DOMContentLoaded", () => {
   Cocktail.loadFromStorage();
 });
-

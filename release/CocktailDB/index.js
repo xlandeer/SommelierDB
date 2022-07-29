@@ -11,6 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var _a, _b;
 var Utils;
 (function (Utils) {
+    Utils.seperatorLine = (classname) => {
+        return classname
+            ? createElementWithAttributes("hr", ["class", classname])
+            : document.createElement("hr");
+    };
     function appendElements(parent, ...nodes) {
         for (const node of nodes) {
             parent.appendChild(node);
@@ -31,9 +36,9 @@ var Utils;
             let files = imageUpload.files;
             if (files) {
                 formData.append("file", files[0]);
-                const response = yield fetch('php/upload.php', {
+                const response = yield fetch("php/upload.php", {
                     method: "POST",
-                    body: formData
+                    body: formData,
                 });
                 //console.log(await response);
             }
@@ -74,11 +79,17 @@ class Cocktail {
     }
     addRepresentation() {
         //Create every Element with Attributes
-        let cocktailWrapper = Utils.createElementWithAttributes("div", ["class", "cocktail-wrapper"]);
+        let cocktailWrapper = Utils.createElementWithAttributes("div", [
+            "class",
+            "cocktail-wrapper",
+        ]);
         let image = Utils.createElementWithAttributes("img", ["src", this.imgPath]);
         let nameLabel = Utils.createElementWithAttributes("h2");
         nameLabel.textContent = this.name;
-        let description = Utils.createElementWithAttributes("div", ["classname", "cocktail-description"]);
+        let description = Utils.createElementWithAttributes("div", [
+            "classname",
+            "cocktail-description",
+        ]);
         description.textContent = this.description;
         let deleteBtn = Utils.createElementWithAttributes("input", ["type", "image"], ["src", "images/x_btn.svg"]);
         //Add DeleteBtn Event Listener
@@ -91,11 +102,16 @@ class Cocktail {
         let iterator = this.ingredients.generateIterator();
         for (const ingredrient of iterator) {
             let ingredient = document.createElement("li");
-            ingredient.textContent = ingredrient.key + ": " + ingredrient.value.amt + " " + ingredrient.value.measure;
+            ingredient.textContent =
+                ingredrient.key +
+                    ": " +
+                    ingredrient.value.amt +
+                    " " +
+                    ingredrient.value.measure;
             ingredients.appendChild(ingredient);
         }
         //Append Elements to their corresponding Parent
-        Utils.appendElements(cocktailWrapper, image, nameLabel, ingredients, description, deleteBtn);
+        Utils.appendElements(cocktailWrapper, image, nameLabel, Utils.seperatorLine(), ingredients, description, deleteBtn);
         Utils.appendElements(this.parent, cocktailWrapper);
     }
     static loadFromStorage(attr = "cocktail_name", searchFilter = "") {
@@ -130,7 +146,11 @@ class Cocktail {
             url: "php/post.php",
             type: "POST",
             // all data || notation in JSON
-            data: { intention: "delete", id: cocktail.id, imgPath: "../" + cocktail.imgPath },
+            data: {
+                intention: "delete",
+                id: cocktail.id,
+                imgPath: "../" + cocktail.imgPath,
+            },
             success: function (data, status, xhr) {
                 Cocktail.loadFromStorage();
             },
@@ -153,7 +173,7 @@ class Cocktail {
                 name: cocktail.name,
                 imageUrl: cocktail.imgPath,
                 ingredients: cocktail.ingredients,
-                description: cocktail.description
+                description: cocktail.description,
             },
             success: function (data, status, xhr) {
                 Cocktail.loadFromStorage();
@@ -178,10 +198,11 @@ const description = document.querySelector(".input-wrapper .cocktail_description
 cocktailFilter.addEventListener("input", (event) => {
     Cocktail.loadFromStorage(attributeToSearch.value, cocktailFilter.value);
 });
-attributeToSearch.addEventListener('change', () => {
+attributeToSearch.addEventListener("change", () => {
     Cocktail.loadFromStorage(attributeToSearch.value, cocktailFilter.value);
 });
-(_a = document.querySelector(".input-wrapper .add-ingr-btn")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => {
+(_a = document
+    .querySelector(".input-wrapper .add-ingr-btn")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => {
     if (inputIngrName.value &&
         /^[0-9]+$/g.test(inputIngrAmt.value) &&
         selectIngrMeasure.value) {
@@ -197,7 +218,8 @@ attributeToSearch.addEventListener('change', () => {
         inputIngrAmt.value = "";
     }
 });
-(_b = document.querySelector(".input-wrapper .add-cocktail-btn")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => __awaiter(void 0, void 0, void 0, function* () {
+(_b = document
+    .querySelector(".input-wrapper .add-cocktail-btn")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => __awaiter(void 0, void 0, void 0, function* () {
     Utils.uploadFile().then(() => {
         let imagePath = "ERROR";
         if (imageUpload.files) {
