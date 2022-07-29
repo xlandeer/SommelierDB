@@ -33,7 +33,7 @@
 
     if($_SERVER['REQUEST_METHOD'] === 'GET'  && isset($_GET['searchFilter']) && isset($_GET['attribute']))	{
         $results = [];
-		$attr_prefix;
+		$attr_prefix = "";
 		switch ($_GET['attribute']) {
 			case 'whiskey_name':
 			case 'distillery':
