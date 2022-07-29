@@ -42,14 +42,14 @@ var Utils;
     Utils.uploadFile = uploadFile;
 })(Utils || (Utils = {}));
 class Whiskey {
-    constructor(imgPath, name, distillery, originCountry, yearsAged, type, additionalTraits, author, noseNotes, tasteNotes, id) {
+    constructor(imgPath, name, distillery, originCountry, yearsAged, type, alcPerc, author, noseNotes, tasteNotes, id) {
         this.imgPath = imgPath;
         this.name = name;
         this.distillery = distillery;
         this.originCountry = originCountry;
         this.yearsAged = yearsAged;
         this.type = type;
-        this.additionalTraits = additionalTraits;
+        this.alcPerc = alcPerc;
         this.author = author;
         this.id = id;
         this.whiskeyInfos = {
@@ -58,7 +58,7 @@ class Whiskey {
             "Origin Country": originCountry,
             "Years Aged": yearsAged,
             "Whiskey Type": type,
-            "Additional Traits": additionalTraits
+            "Alcohol Percentage": alcPerc + "%"
         };
         this.noseNotes = [...new Set(noseNotes)];
         this.tasteNotes = [...new Set(tasteNotes)];
@@ -128,7 +128,7 @@ class Whiskey {
                 parentDOMElement.innerHTML = "";
                 if (returnData) {
                     for (const whiskey of JSON.parse(returnData)) {
-                        const newWhiskey = new Whiskey(whiskey.imageUrl, whiskey.name, whiskey.distillery, whiskey.originCountry, whiskey.yearsAged, whiskey.type, whiskey.additionalTraits, whiskey.author, whiskey.noseNotes, whiskey.tasteNotes, whiskey.id);
+                        const newWhiskey = new Whiskey(whiskey.imageUrl, whiskey.name, whiskey.distillery, whiskey.originCountry, whiskey.yearsAged, whiskey.type, whiskey.alcPerc, whiskey.author, whiskey.noseNotes, whiskey.tasteNotes, whiskey.id);
                         newWhiskey.addRepresentation();
                     }
                 }
@@ -171,7 +171,7 @@ class Whiskey {
                 origin_country: whiskey.originCountry,
                 years_aged: whiskey.yearsAged,
                 type: whiskey.type,
-                additional_traits: whiskey.additionalTraits,
+                alc_perc: whiskey.alcPerc,
                 nose_notes: whiskey.noseNotes,
                 taste_notes: whiskey.tasteNotes,
                 author: whiskey.author,
@@ -194,7 +194,7 @@ const inputWhiskeyDistillery = document.querySelector(".input-wrapper .whiskey-d
 const inputOriginCountry = document.querySelector(".input-wrapper .whiskey-data-wrapper .origin_country");
 const inputYearsAged = document.querySelector(".input-wrapper .whiskey-data-wrapper .years_aged");
 const inputType = document.querySelector(".input-wrapper .whiskey-data-wrapper .type");
-const inputAdditionalTraits = document.querySelector(".input-wrapper .whiskey-data-wrapper .additional_traits");
+const inputAlcPerc = document.querySelector(".input-wrapper .whiskey-data-wrapper .alc_perc");
 const inputNoseNote = document.querySelector(".input-wrapper .whiskey-note-wrapper .add-nose-note");
 const inputTasteNote = document.querySelector(".input-wrapper .whiskey-note-wrapper .add-taste-note");
 const inputAuthor = document.querySelector(".input-wrapper .whiskey-note-wrapper .author");
@@ -227,14 +227,14 @@ addTasteNoteBtn.addEventListener("click", () => {
             imagePath = "images/" + imageUpload.files[0].name;
         }
         if (inputWhiskeyName.value && imagePath) {
-            const newWhiskey = new Whiskey(imagePath, inputWhiskeyName.value, inputWhiskeyDistillery.value, inputOriginCountry.value, parseInt(inputYearsAged.value), inputType.value, inputAdditionalTraits.value, inputAuthor.value, currentNoseNotes, currentTasteNotes);
+            const newWhiskey = new Whiskey(imagePath, inputWhiskeyName.value, inputWhiskeyDistillery.value, inputOriginCountry.value, parseInt(inputYearsAged.value), inputType.value, parseInt(inputAlcPerc.value), inputAuthor.value, currentNoseNotes, currentTasteNotes);
             Whiskey.saveToStorage(newWhiskey);
             inputWhiskeyName.value = "";
             inputWhiskeyDistillery.value = "";
             inputOriginCountry.value = "";
             inputYearsAged.value = "";
             inputType.value = "";
-            inputAdditionalTraits.value = "";
+            inputAlcPerc.value = "";
             inputAuthor.value = "";
             tasteNoteWrapper.innerHTML = "";
             noseNoteWrapper.innerHTML = "";

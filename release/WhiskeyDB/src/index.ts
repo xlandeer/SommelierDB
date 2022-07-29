@@ -48,7 +48,7 @@ class Whiskey {
     private originCountry: string,
     private yearsAged: number,
     private type: string,
-    private additionalTraits: string,
+    private alcPerc: number,
     private author: string,
     noseNotes: string[],
     tasteNotes: string[],
@@ -60,7 +60,7 @@ class Whiskey {
       "Origin Country": originCountry,
       "Years Aged": yearsAged,
       "Whiskey Type": type,
-      "Additional Traits": additionalTraits
+      "Alcohol Percentage": alcPerc + "%"
     }
     this.noseNotes = [...new Set(noseNotes)];
     this.tasteNotes = [...new Set(tasteNotes)];
@@ -162,7 +162,7 @@ class Whiskey {
               whiskey.originCountry,
               whiskey.yearsAged,
               whiskey.type,
-              whiskey.additionalTraits,
+              whiskey.alcPerc,
               whiskey.author,
               whiskey.noseNotes,
               whiskey.tasteNotes,
@@ -215,7 +215,7 @@ class Whiskey {
         origin_country: whiskey.originCountry,
         years_aged: whiskey.yearsAged,
         type: whiskey.type,
-        additional_traits: whiskey.additionalTraits,
+        alc_perc: whiskey.alcPerc,
         nose_notes: whiskey.noseNotes,
         taste_notes: whiskey.tasteNotes,
         author: whiskey.author,
@@ -251,8 +251,8 @@ const inputYearsAged = document.querySelector(
 const inputType = document.querySelector(
   ".input-wrapper .whiskey-data-wrapper .type"
 ) as HTMLInputElement;
-const inputAdditionalTraits = document.querySelector(
-  ".input-wrapper .whiskey-data-wrapper .additional_traits"
+const inputAlcPerc = document.querySelector(
+  ".input-wrapper .whiskey-data-wrapper .alc_perc"
 ) as HTMLInputElement;
 const inputNoseNote = document.querySelector(
   ".input-wrapper .whiskey-note-wrapper .add-nose-note"
@@ -313,7 +313,7 @@ document
           inputOriginCountry.value,
           parseInt(inputYearsAged.value),
           inputType.value,
-          inputAdditionalTraits.value,
+          parseInt(inputAlcPerc.value),
           inputAuthor.value,
           currentNoseNotes,
           currentTasteNotes
@@ -325,7 +325,7 @@ document
         inputOriginCountry.value = "";
         inputYearsAged.value = "";
         inputType.value = "";
-        inputAdditionalTraits.value = "";
+        inputAlcPerc.value = "";
         inputAuthor.value = "";
         tasteNoteWrapper.innerHTML = "";
         noseNoteWrapper.innerHTML = "";

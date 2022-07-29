@@ -41,7 +41,7 @@
 			$origin_country= $_POST["origin_country"];
 			$years_aged= $_POST["years_aged"];
 			$type= $_POST["type"];
-			$additional_traits= $_POST["additional_traits"];
+			$alc_perc= $_POST["alc_perc"];
 			$nose_notes= $_POST["nose_notes"];
 			$taste_notes= $_POST["taste_notes"];
 			$author= $_POST["author"];
@@ -50,8 +50,8 @@
 			
 			
 
-			$sql = "INSERT INTO whiskey_data(image_url, name, distillery, origin_country, years_aged, type, additional_traits, author)";
-			$sql .= "VALUES('$imageUrl','$whiskeyName','$distillery','$origin_country',$years_aged,'$type','$additional_traits', '$author');";
+			$sql = "INSERT INTO whiskey_data(image_url, name, distillery, origin_country, years_aged, type, alc_perc, author)";
+			$sql .= "VALUES('$imageUrl','$whiskeyName','$distillery','$origin_country',$years_aged,'$type','$alc_perc', '$author');";
 			executeQuery($conn, $sql);
 
 			$sql = "SELECT MAX(id) AS ID FROM whiskey_data";

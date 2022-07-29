@@ -40,7 +40,7 @@
 			case 'origin_country':
 			case 'years_aged':
 			case 'type':
-			case 'additional_traits':
+			case 'alc_perc':
 				$attr_prefix = "wd.";
 				break;
 			case 'nose':
@@ -86,7 +86,7 @@
                         array_push($noseNoteRes, $rowResNose);
                     }
 				}
-				$rowRes = ['imageUrl' => $row["image_url"], 'name' => $row["name"], 'distillery' => $row["distillery"],'originCountry' => $row["origin_country"],'yearsAged' => $row["years_aged"],'type' => $row["type"],'additionalTraits' => $row["additional_traits"],'author' => $row["author"],'tasteNotes' => $tasteNoteRes,'noseNotes' => $noseNoteRes, 'id' => $id];
+				$rowRes = ['imageUrl' => $row["image_url"], 'name' => $row["name"], 'distillery' => $row["distillery"],'originCountry' => $row["origin_country"],'yearsAged' => $row["years_aged"],'type' => $row["type"],'alcPerc' => $row["alc_perc"],'author' => $row["author"],'tasteNotes' => $tasteNoteRes,'noseNotes' => $noseNoteRes, 'id' => $id];
 				array_push($results, $rowRes);
 			}
 			echo(json_encode($results));

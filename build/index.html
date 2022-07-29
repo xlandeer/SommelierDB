@@ -8,73 +8,11 @@
 <body>
   
   <main>
-    <div class="container">
-      <div class="row">
-        <h1 class="headline text-center">Whiskeys</h1>
-        <div class="dropdown text-center">
-          <input type="checkbox" id="expand-toggle" />
-          <label for="expand-toggle" id="expand-btn">Add New Whiskey</label>
-          <div class="input-wrapper" id="inputwrapper">
-            <div class="whiskey-data-wrapper">
-              <label class="col-12" for="image-upload">Image Upload</label>
-              <input class="text-center" id="image-upload" type="file" name="image-upload"><br>
-              <label class="col-5">Whiskey Name</label>
-              <label class="col-5">Whiskey Distillery</label><br>
-              <input class="name col-5" type="text">
-              <input class="distillery col-5" type="text"><br>
-              <label class="col-5">Origin Country</label>
-              <label class="col-5">Years Aged</label><br>
-              <input class="origin_country col-5" type="text">
-              <input class="years_aged col-5" type="number"><br>
-              <label class="col-5">Whiskey Type</label>
-              <label class="col-5">Alcohol Percentage</label><br>
-              <input class="type col-5" type="text">
-              <input class="alc_perc col-5" type="number"><br>
-            </div>
-            <div class="whiskey-note-wrapper">
-              <label for="add-nose-note">Nose</label>
-              <input class="add-nose-note mt-3" type="text" required>
-              <button class="add-nose-note-btn">Add</button><br>
-              <div class="nose-note-wrapper"></div>
-              <label for="add-taste-note">Taste</label>
-              <input class="add-taste-note mt-3" type="text" required>
-              <button class="add-taste-note-btn">Add</button><br>
-              <div class="taste-note-wrapper"></div>
-              <label for="add-taste-note">Author</label>
-              <input class="author mt-3" type="text" required>
-            </div>
-            
-            
-            <div>
-              <button class="add-whiskey-btn col-12 my-2">Add Whiskey</button>
-            </div>
-
-          </div>
-        </div>
-
-        <div class="search-wrapper text-center my-2">
-          <input type="search" class="whiskey-filter" placeholder="Search...">
-          <Select class="search-for-select">
-            <option value="whiskey_name">Whiskey Name</option>
-            <option value="distillery">Distillery Name</option>
-            <option value="origin_country">Origin Country</option>
-            <option value="years_aged">Years Aged</option>
-            <option value="type">Whiskey Type</option>
-            <option value="alc_perc">Alcohol Percentage</option>
-            <option value="nose">Nose</option>
-            <option value="taste">Taste</option>
-            <option value="author">Author</option>
-          </Select>
-        </div>
-        
-        <div class="whiskey-section col-12"></div>
-        
-      </div>
-    </div>
 
   </main>
 
-  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="crossorigin="anonymous"></script>
+  <!-- If needed: -->
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="crossorigin="anonymous"></script> -->
   <script src="index.js"></script>
 </body>
 </html>
