@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 29. Jul 2022 um 11:40
+-- Erstellungszeit: 29. Jul 2022 um 19:06
 -- Server-Version: 10.4.24-MariaDB
 -- PHP-Version: 8.1.6
 
@@ -35,7 +35,7 @@ CREATE TABLE `whiskey_data` (
   `origin_country` varchar(30) NOT NULL,
   `years_aged` int(11) NOT NULL,
   `type` varchar(50) NOT NULL,
-  `additional_traits` varchar(200) NOT NULL,
+  `alc_perc` int(15) NOT NULL,
   `author` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -43,8 +43,8 @@ CREATE TABLE `whiskey_data` (
 -- Daten für Tabelle `whiskey_data`
 --
 
-INSERT INTO `whiskey_data` (`id`, `image_url`, `name`, `distillery`, `origin_country`, `years_aged`, `type`, `additional_traits`, `author`) VALUES
-(27, 'images/buffalo_trace.jpeg', 'Buffalo Trace', 'Buffalo Trace', 'USA', 6, 'Kentucky Straight Bourbon', '45%', 'Alexander Joerges');
+INSERT INTO `whiskey_data` (`id`, `image_url`, `name`, `distillery`, `origin_country`, `years_aged`, `type`, `alc_perc`, `author`) VALUES
+(27, 'images/buffalo_trace.jpeg', 'Buffalo Trace', 'Buffalo Trace', 'USA', 6, 'Kentucky Straight Bourbon', 45, 'Alexander Joerges');
 
 -- --------------------------------------------------------
 
