@@ -11,7 +11,7 @@ TypeScript partly learned from:
   
 # Requirements #
 * Apache2 WebServer and MySQLServer(e.g. [**XAMPP**](https://www.apachefriends.org/de/index.html))
-
+* Node.js - npm
 
 ## Setup ##
 ```sh
