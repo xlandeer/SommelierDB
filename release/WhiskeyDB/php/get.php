@@ -35,7 +35,7 @@
         $results = [];
 		$attr_prefix = "";
 		switch ($_GET['attribute']) {
-			case 'whiskey_name':
+			case 'name':
 			case 'distillery':
 			case 'origin_country':
 			case 'years_aged':
@@ -54,10 +54,10 @@
 		}
 		$attr = $attr_prefix . $_GET['attribute'];
 
-        $sql = 'SELECT wd.* FROM whiskey_data wd  ';
+        $sql = 'SELECT DISTINCT wd.* FROM whiskey_data wd  ';
 		$sql .= 'LEFT JOIN whiskey_note_taste wnt ON wd.id = wnt.whiskey_id ';
 		$sql .= 'LEFT JOIN whiskey_note_nose wnn ON wd.id = wnn.whiskey_id ';
-		$sql .= 'WHERE '.$attr.' LIKE "%'.$_GET["searchFilter"].'%" GROUP BY wd.name;';
+		$sql .= 'WHERE '.$attr.' LIKE "%'.$_GET["searchFilter"].'%";';
 
 		$searchRes = mysqli_query($conn, $sql);
 		

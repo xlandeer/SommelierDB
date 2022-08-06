@@ -36,7 +36,7 @@
 		$attr = $_GET['attribute'] == "ingr_name" ? "i." : "c.";
 		$attr .= $_GET['attribute'];
 
-        $sql = 'SELECT c.id, c.cocktail_name, c.image_url, c.description FROM cocktail c LEFT JOIN ingredients i ON c.id = i.cocktail_id WHERE '.$_GET["attribute"].' LIKE "%'.$_GET["searchFilter"].'%" GROUP BY c.cocktail_name;';
+        $sql = 'SELECT DISTINCT c.* FROM cocktail c LEFT JOIN ingredients i ON c.id = i.cocktail_id WHERE '.$_GET["attribute"].' LIKE "%'.$_GET["searchFilter"].'%";';
 		$searchRes = mysqli_query($conn, $sql);
 		if ($searchRes->num_rows > 0) {
 			

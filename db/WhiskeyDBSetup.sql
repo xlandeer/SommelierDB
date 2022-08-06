@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Erstellungszeit: 29. Jul 2022 um 19:06
--- Server-Version: 10.4.24-MariaDB
--- PHP-Version: 8.1.6
+-- Host: localhost
+-- Generation Time: Aug 06, 2022 at 11:56 PM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Datenbank: `whiskey`
+-- Database: `Whiskey`
 --
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `whiskey_data`
+-- Table structure for table `whiskey_data`
 --
 
 CREATE TABLE `whiskey_data` (
@@ -35,12 +35,12 @@ CREATE TABLE `whiskey_data` (
   `origin_country` varchar(30) NOT NULL,
   `years_aged` int(11) NOT NULL,
   `type` varchar(50) NOT NULL,
-  `alc_perc` int(15) NOT NULL,
+  `alc_perc` int(11) NOT NULL,
   `author` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Daten für Tabelle `whiskey_data`
+-- Dumping data for table `whiskey_data`
 --
 
 INSERT INTO `whiskey_data` (`id`, `image_url`, `name`, `distillery`, `origin_country`, `years_aged`, `type`, `alc_perc`, `author`) VALUES
@@ -49,7 +49,7 @@ INSERT INTO `whiskey_data` (`id`, `image_url`, `name`, `distillery`, `origin_cou
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `whiskey_note_nose`
+-- Table structure for table `whiskey_note_nose`
 --
 
 CREATE TABLE `whiskey_note_nose` (
@@ -58,7 +58,7 @@ CREATE TABLE `whiskey_note_nose` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Daten für Tabelle `whiskey_note_nose`
+-- Dumping data for table `whiskey_note_nose`
 --
 
 INSERT INTO `whiskey_note_nose` (`whiskey_id`, `note`) VALUES
@@ -69,7 +69,7 @@ INSERT INTO `whiskey_note_nose` (`whiskey_id`, `note`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `whiskey_note_taste`
+-- Table structure for table `whiskey_note_taste`
 --
 
 CREATE TABLE `whiskey_note_taste` (
@@ -78,7 +78,7 @@ CREATE TABLE `whiskey_note_taste` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Daten für Tabelle `whiskey_note_taste`
+-- Dumping data for table `whiskey_note_taste`
 --
 
 INSERT INTO `whiskey_note_taste` (`whiskey_id`, `note`) VALUES
@@ -87,49 +87,49 @@ INSERT INTO `whiskey_note_taste` (`whiskey_id`, `note`) VALUES
 (27, 'Orange');
 
 --
--- Indizes der exportierten Tabellen
+-- Indexes for dumped tables
 --
 
 --
--- Indizes für die Tabelle `whiskey_data`
+-- Indexes for table `whiskey_data`
 --
 ALTER TABLE `whiskey_data`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `whiskey_note_nose`
+-- Indexes for table `whiskey_note_nose`
 --
 ALTER TABLE `whiskey_note_nose`
   ADD PRIMARY KEY (`whiskey_id`,`note`);
 
 --
--- Indizes für die Tabelle `whiskey_note_taste`
+-- Indexes for table `whiskey_note_taste`
 --
 ALTER TABLE `whiskey_note_taste`
   ADD PRIMARY KEY (`whiskey_id`,`note`);
 
 --
--- AUTO_INCREMENT für exportierte Tabellen
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT für Tabelle `whiskey_data`
+-- AUTO_INCREMENT for table `whiskey_data`
 --
 ALTER TABLE `whiskey_data`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
--- Constraints der exportierten Tabellen
+-- Constraints for dumped tables
 --
 
 --
--- Constraints der Tabelle `whiskey_note_nose`
+-- Constraints for table `whiskey_note_nose`
 --
 ALTER TABLE `whiskey_note_nose`
-  ADD CONSTRAINT `FK_whiskey_id_nose` FOREIGN KEY (`whiskey_id`) REFERENCES `whiskey_data` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `FK_whiskey_id_nose` FOREIGN KEY (`whiskey_id`) REFERENCES `whiskey_data` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Constraints der Tabelle `whiskey_note_taste`
+-- Constraints for table `whiskey_note_taste`
 --
 ALTER TABLE `whiskey_note_taste`
   ADD CONSTRAINT `FK_whiskey_id_taste` FOREIGN KEY (`whiskey_id`) REFERENCES `whiskey_data` (`id`) ON DELETE CASCADE;
